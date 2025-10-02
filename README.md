@@ -3,7 +3,8 @@
 This is an interpreter for my extension of the Rubik's cube notation, written in
 J. Run it using either `jconsole` or `jqt`, with `main.ijs` as the script, with
 this project as the current directory (Or files won't load due to relative paths
-not being resolved)
+not being resolved). The script will automatically detect whether to use GUI or
+CLI depending on how you run it.
 
 ## What's the notation?
 
@@ -87,6 +88,10 @@ problem of clashing with turn notation, so I went with `<name>` instead of just
 
 Conditionals are a bit harder, and I am still not sure how to do them properly,
 so I settled with whatever I have here.
+
+## Dependencies
+
+None except for J 9.6. Might work with earlier versions, but I haven't checked.
 
 ## Name
 
