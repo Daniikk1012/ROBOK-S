@@ -91,3 +91,8 @@ so I settled with whatever I have here.
 ## Name
 
 Thought of it while writing this README, a play on "robot" + "Rubik's"
+
+## License
+
+This project is licensed under GNU GPL v3. `jarser.ijs` specifically is also
+available under MPL v2.0
