@@ -2,16 +2,35 @@ NB. GUI system
 
 require'cube.ijs'
 require'parser.ijs'
+
+cocurrent'settings'
+load'settings.ijs'
+
 cocurrent'gui'
 coinsert'jgl2'
+coinsert'settings'
 
+9!:1@<.@(+/ .^&2@(6!:0@]))'' NB. Randomize seed, copied from J phrases
+
+STYLESHEET =: noun define
+  * {
+    font-size: {0}pt;
+  }
+  Form {
+    background-color: rgb({1});
+  }
+)
 BACKGROUND_COLOR =: 3$200
-BACKGROUND_COLOR_FORMATTED =. }.;<@(',',":)"0 BACKGROUND_COLOR
+MIN_FONT_SIZE =. 12
+MAX_FONT_SIZE =. 24
 
 wd'pc main closeok'
 wd'pmove _1 _1 800 400'
 wd'pn *Rubik''s Cube'
-wd'bin hh1'
+wd'bin hv1h'
+wd'cc options button'
+wd'cn Options'
+wd'bin sz'
 wd'cc graphics isigraph'
 wd'set _ minwh 50 50'
 wd'bin zv1h'
@@ -30,15 +49,51 @@ wd'bin z'
 wd'cc code editm'
 wd'cc compile button'
 wd'cn Compile'
-wd'pstylesheet *Form{background-color:rgb(',BACKGROUND_COLOR_FORMATTED,')}'
 
-main_scramble_button =: {{ wd'set scramble_text text *',scramble_cube_'' }}
+wd'pc options owner ptop'
+wd'pn Options'
+wd'bin vh'
+wd'cc font_size_label static'
+wd'cn *Font size:'
+wd'cc font_size_slider slider'
+wd'set _ min ',":MIN_FONT_SIZE
+wd'set _ max ',":MAX_FONT_SIZE
+wd'set _ value ',":FONT_SIZE
+wd'cc font_size_spinbox spinbox'
+wd'set _ min ',":MIN_FONT_SIZE
+wd'set _ max ',":MAX_FONT_SIZE
+wd'set _ value ',":FONT_SIZE
+wd'bin zs'
+wd'cc back button'
+wd'cn Back'
+
+wd'psel main'
+
+update_style =: {{
+  id =. wd'getp id'
+  wd'psel main'
+  s =. ('{0}';":FONT_SIZE)stringreplace STYLESHEET
+  s =. ('{1}';}.;<@(',',":)"0 BACKGROUND_COLOR)stringreplace s
+  wd'pstylesheet *',s
+  wd'psel ',id
+}}
+update_style''
+
+main_options_button =: {{
+  wd'psel options'
+  wd'pshow'
+  wd'pcenter'
+}}
+
+main_scramble_button =: {{
+  wd'set scramble_text text *',scramble_text =: scramble_cube_''
+  main_compile_button''
+}}
 
 main_choose_button =: {{
   file =. wd'mb open1 "Choose file" .'
   if. #file do.
-    wd'set path text *',file
-    path =: file
+    wd'set path text *',path =: file
     main_load_button''
   end.
 }}
@@ -117,6 +172,23 @@ main_graphics_paint =: {{
     glbrush''
     glpolygon x
   }}"1 COLORS{~STATE{~SIDES_parser_ i.[)items,"2 origin+"1 POSITIONS*"1 size
+}}
+
+options_close =: options_back_button =: {{
+  if. _1-:(show nl_settings_'')fwrite'settings.ijs' do.
+    wdinfo'Error!';'could not save settings: ',>{:2!:8''
+  end.
+  wd'pshow hide'
+}}
+
+options_font_size_slider_changed =: {{
+  wd'set font_size_spinbox value ',":FONT_SIZE_settings_ =: font_size_slider
+  update_style''
+}}
+
+options_font_size_spinbox_changed =: {{
+  wd'set font_size_slider value ',":FONT_SIZE_settings_ =: font_size_spinbox
+  update_style''
 }}
 
 wd'pshow'

@@ -15,7 +15,7 @@ It supports the basic Rubik's cube notation, including:
 - `Rw`, `Lw`, `Uw`, `Dw`, `Fw`, `Bw` for the wide turns;
 - `r`, `l`, `u`, `d`, `f`, `b` for the wide turns as well;
 - `x`, `y`, `z` for whole cube rotations;
-- `M`, `E`, `S` for middle layer turns.
+- `M`, `E`, `S` for middle layer turns;
 - `( ... )` for grouping.
 
 `-` and whitespace are ignored.
@@ -23,7 +23,7 @@ It supports the basic Rubik's cube notation, including:
 It also supports some extensions (which is the whole point of this project),
 specifically:
 - `'` does not only negate turns, but anything except conditionals;
-- Same for `2`, but that's less exciting;
+- `2` does not only double turns, but anything;
 - `{ [ condition ] => moves ... }` - conditionals (more below);
 - `<macro>: body` - macro definitions, terminated by a newline;
 - `<macro>` - macro calls.
