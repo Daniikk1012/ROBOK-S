@@ -74,7 +74,8 @@ Chars =: {{
 }}
 
 NB. Whitespace (Single character, not a newline)
-lws =: '-'Char`(' 'Char)`(TAB Char)`(CR Char)Any
+comment =. '>>'Chars Right(LF Char Not And char Many)
+lws =: '-'Char`(' 'Char)`(TAB Char)`(CR Char)`(comment f.) Any
 
 NB. Whitespace (Multiple characters, without newlines)
 lwss =: lws Many

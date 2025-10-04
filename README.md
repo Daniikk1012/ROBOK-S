@@ -26,7 +26,8 @@ specifically:
 - `2` does not only double turns, but anything;
 - `{ [ condition ] => moves ... }` - conditionals (more below);
 - `<macro>: body` - macro definitions, terminated by a newline;
-- `<macro>` - macro calls.
+- `<macro>` - macro calls;
+- `>> comment` - comments.
 
 TODO: comments (Will take like 5 minutes to implement, but I'm too lazy)
 
