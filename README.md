@@ -29,8 +29,6 @@ specifically:
 - `<macro>` - macro calls;
 - `>> comment` - comments.
 
-TODO: comments (Will take like 5 minutes to implement, but I'm too lazy)
-
 ### Macros
 
 Macros are lexically scoped, and expanded as soon as they are seen during
