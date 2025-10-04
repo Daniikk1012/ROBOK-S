@@ -5,10 +5,10 @@ cocurrent'parser'
 coinsert'jarser'
 
 NB. All possible basic (Without modifiers) turns
-TURNS =: 'RLUDFBrludfbxyzMES'
+TURNS =: 'RUFLDBrufldbxyzMES'
 
 Note'Cube state'
-  State is a list of six 3x3 tables. Each 3x3 is a side. Order: R L U D F B.
+  State is a list of six 3x3 tables. Each 3x3 is a side. Order: R U F L D B.
   Left, Right, Front and Back sides are oriented with Up side on the top.
   Up side is oriented with Back side on the top.
   Down side is oriented with Front side on the top.
@@ -16,8 +16,8 @@ Note'Cube state'
   Sticker IDs are indices to state in ravelled form
 )
 
-SIDES =: 'RLUDFB'
-ADJASCENT =: 'UFBD','UBFD','BLRF','FLRB','ULRD',:'URLD'
+SIDES =: 'RUFLDB' NB. Difference of indices of opposites is 3
+ADJASCENT =: 'UFBD','BLRF','ULRD','UBFD','FLRB',:'URLD'
 
 NB. AST type enum. The variables have names AST_*.
 NB. List of all AST type names is in AST_TYPES.
@@ -88,7 +88,7 @@ wss =: ws Many
 
 NB. A turn
 basic =. (,(i.#TURNS){{y Char Map(x"_)`''}}"0 TURNS)Any
-wide =. (,(TURNS&i.{{(>y)Chars Map(x"_)`''}}"0 toupper<@,"0'w'"_)'rludfb')Any
+wide =. (,(TURNS&i.{{(>y)Chars Map(x"_)`''}}"0 toupper<@,"0'w'"_)'rufldb')Any
 turn =: wide f.Or(basic f.)Map(AST_TURN;<)
 
 NB. A macro name
@@ -131,6 +131,7 @@ group =: '('Char Right scope Left(')'Char Must ErrMap('expected '')'''"_))
 
 NB. A condition group
 NB. The condition is in sum of products form, with each term being a = or <>
+NB. Each term is =, <> (Not equals), >< (Opposites), or >/< (Not opposites)
 side1 =. (,{{y Char`''}}"0 SIDES)Any Map(SIDES&i.)
 side2 =. side1 f.`(side1 f.)List Map;
 side3 =. side1 f.`(side1 f.)`(side1 f.)List Map;
@@ -141,8 +142,10 @@ mapping3 =. (9*{.)+9#.[:+/0 0 2 6 _{~(ADJASCENT{~{.)i.SIDES{~}.
 unfiltered =. sides f.Map(mapping1 f.`(mapping2 f.)`(mapping3 f.)@.(<:@#))
 sticker =. unfiltered f.Filter(~:&_)Must ErrMap('invalid sticker notation'"_)
 equality_unmapped =. '='Char Map 1:Or('<>'Chars Map 0:)
-equality =. equality_unmapped f.Must ErrMap('expected ''='' or ''<>'''"_)
-comp_unmapped =. sticker f.Left wss`(equality f.)`(wss Right(sticker f.))List
+opposite_unmapped =. '><'Chars Map 3:Or('>/<'Chars Map 2:)
+error =. 'expected ''='', ''<>'', ''><'', or ''>/<'''
+comp_sign =. equality_unmapped f.Or(opposite_unmapped f.)Must ErrMap(error"_)
+comp_unmapped =. sticker f.Left wss`(comp_sign f.)`(wss Right(sticker f.))List
 comp =. comp_unmapped f.Map>Map(1 0 2&{)
 anded =. comp f.Pair(wss Right(','Char)Right wss Right(comp f.)Many)Map(>@(,>)/)
 ored =. anded f.Pair(wss Right('|'Char)Right wss Right(anded f.)Many)Map((,>)/)

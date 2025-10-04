@@ -13,20 +13,20 @@ NB. counterclockwise order so that C. will rotate them clockwise)
 PERMUTATIONS =: (#TURNS_parser_)$a:
 append =. {{PERMUTATIONS =: ,&y&.>&.((TURNS_parser_ i.x)&{)PERMUTATIONS}}
 SIDES_parser_ append items(0 6 8 2;1 3 7 5)&(+each)every 9*i.6
-'R'append 44 35 45 26;41 32 48 23;38 29 51 20
-'L'append 53 27 36 18;50 30 39 21;47 33 42 24
-'U'append 47 11 38  2;46 10 37  1;45  9 36  0
-'D'append 42 15 51  6;43 16 52  7;44 17 53  8
-'F'append 24 17 29  0;25 14 28  3;26 11 27  6
-'B'append 33  9 20  8;34 12 19  5;35 15 18  2
-'M'append 52 28 37 19;49 31 40 22;46 34 43 25
-'E'append 39 12 48  3;40 13 49  4;41 14 50  5
-'S'append 21 16 32  1;22 13 31  4;23 10 30  7
+'R'append 11 20 38 51;14 23 41 48;17 26 44 45
+'U'append 27 18  0 45;28 19  1 46;29 20  2 47
+'F'append 15 35 38  0;16 32 37  3;17 29 36  6
+'L'append  9 53 36 18;12 50 39 21;15 47 42 24
+'D'append 24 33 51  6;25 34 52  7;26 35 53  8
+'B'append  9  2 44 33;10  5 43 30;11  8 42 27
+'M'append 10 52 37 19;13 49 40 22;16 46 43 25
+'E'append 21 30 48  3;22 31 49  4;23 32 50  5
+'S'append 12 34 41  1;13 31 40  4;14 28 39  7
 'r'append(,|.each)&>/(TURNS_parser_ i.'RM'){PERMUTATIONS
-'l'append ,       &>/(TURNS_parser_ i.'LM'){PERMUTATIONS
 'u'append(,|.each)&>/(TURNS_parser_ i.'UE'){PERMUTATIONS
-'d'append ,       &>/(TURNS_parser_ i.'DE'){PERMUTATIONS
 'f'append ,       &>/(TURNS_parser_ i.'FS'){PERMUTATIONS
+'l'append ,       &>/(TURNS_parser_ i.'LM'){PERMUTATIONS
+'d'append ,       &>/(TURNS_parser_ i.'DE'){PERMUTATIONS
 'b'append(,|.each)&>/(TURNS_parser_ i.'BS'){PERMUTATIONS
 'x'append(,|.each)&>/(TURNS_parser_ i.'rL'){PERMUTATIONS
 'y'append(,|.each)&>/(TURNS_parser_ i.'uD'){PERMUTATIONS
@@ -45,7 +45,11 @@ rotate =: {{
     for_term. >{:x do.
       'cond body' =. term
       if. #cond do.
-        if. -.+./([:*./(1&{~:&({&(,y)){:)`(1&{=&({&(,y)){:)@.{.rows)every cond
+        neq =. 1&{~:&({&(,y)){:
+        eq =. 1&{=&({&(,y)){:
+        nop =. 1&{(3~:|@-)&({&(,y)){:
+        op =. 1&{(3=|@-)&({&(,y)){:
+        if. -.+./([:*./neq`eq`nop`op@.{.rows)every cond
         do.
           continue.
         end.
@@ -69,22 +73,21 @@ rotate =: {{
 
 NB. Prints the cube state y in a (almost) pretty format
 display =: {{
-  s =. ,((3$' '),{&SIDES_parser_,LF"_)rows 2{y
-  s =. s,,({&SIDES_parser_,LF"_)rows,./1 4 0 5{y
-  s =. s,,((3$' '),{&SIDES_parser_,LF"_)rows 3{y
+  s =. ,((3$' '),{&SIDES_parser_,LF"_)rows(SIDES_parser_ i.'U'){y
+  s =. s,,({&SIDES_parser_,LF"_)rows,./(SIDES_parser_ i.'LFRB'){y
+  s =. s,,((3$' '),{&SIDES_parser_,LF"_)rows(SIDES_parser_ i.'D'){y
   echo}:s
 }}
 
 NB. Returns a randomly generated scramble
 scramble =: {{
-  s =. 'RLUDFB'
   r =. ,?6
   for. i.17+?5 do.
-    if. =/<.2%~_2{.!.(#s)r do.
-      r =. r,+&2^:(((-2&|){:r)&<:)?-&2#s
+    if. 3=|-/_2{.!.(#SIDES_parser_)r do.
+      r =. r,(+(1 2-~sort(,6|+&3){:r)&I.)?2-~#SIDES_parser_
     else.
-      r =. r,>:^:(({:r)&<:)?<:#s
+      r =. r,>:^:(({:r)&<:)?<:#SIDES_parser_
     end.
   end.
-  }.;(r{s)' '&,@,each('';'''';'2'){~?3$~#r
+  }.;(r{SIDES_parser_)' '&,@,each('';'''';'2'){~?3$~#r
 }}

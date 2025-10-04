@@ -137,7 +137,7 @@ main_scramble_text_button =: main_compile_button =: {{
 }}
 
 NB. Using the same order as SIDES_parser_
-COLORS =: 255 0 0,255 165 0,255 255 255,255 255 0,0 255 0,:0 0 255
+COLORS =: 255 0 0,255 255 255,0 255 0,255 165 0,255 255 0,:0 0 255
 
 NB. Polygon points (Relative to viewport size)
 NB. For right, top, and front, in that order

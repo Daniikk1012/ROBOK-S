@@ -49,9 +49,9 @@ A condition is either empty, in which case it is always considered to be true,
 or it is a `|`-separated list of subconditions, at least one of which has to be
 true for the whole condition to be true. Each subcondition is a `,`-separated
 list of comparisons, and each comparison must be true for the subcondition to be
-true. Each comparison is two sticker identifiers, separated by `=` or `<>`,
-checking for equality or inequality, respectively. A sticker is denoted as
-follows:
+true. Each comparison is two sticker identifiers, separated by `=`, `<>`, `><`,
+or `>/<`, checking for equality or inequality, being opposite colors, and not
+being opposite colors, respectively. A sticker is denoted as follows:
 - If it's a center, just use the face of that center, e.g., `R` for the center
   sticker of the right face;
 - If it's an edge, use first the face that sticker is on, and then the side it's
@@ -65,7 +65,7 @@ An example of a conditional (It does not do anything meaningful, just syntax
 demonstration):
 ```
 {
-    [RU = LU, FU = BU | RD = LD, FD = BD] => U2
+    [RU = LU, FU <> BU | RD >< LD, FD >/< BD] => U2
     [] => D2
 }
 ```
