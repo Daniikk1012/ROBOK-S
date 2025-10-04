@@ -1,10 +1,11 @@
 NB. GUI system
 
 require'cube.ijs'
+require'defaults.ijs'
 require'parser.ijs'
 
 cocurrent'settings'
-load'settings.ijs'
+load^:fexist'settings.ijs'
 
 cocurrent'gui'
 coinsert'jgl2'
