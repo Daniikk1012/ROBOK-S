@@ -21,7 +21,6 @@ STYLESHEET =: noun define
     background-color: rgb({1});
   }
 )
-BACKGROUND_COLOR =: 3$200
 MIN_FONT_SIZE =. 12
 MAX_FONT_SIZE =. 24
 
@@ -51,25 +50,6 @@ wd'cc code editm'
 wd'cc compile button'
 wd'cn Compile'
 
-wd'pc options owner ptop'
-wd'pn Options'
-wd'bin vh'
-wd'cc font_size_label static'
-wd'cn *Font size:'
-wd'cc font_size_slider slider'
-wd'set _ min ',":MIN_FONT_SIZE
-wd'set _ max ',":MAX_FONT_SIZE
-wd'set _ value ',":FONT_SIZE
-wd'cc font_size_spinbox spinbox'
-wd'set _ min ',":MIN_FONT_SIZE
-wd'set _ max ',":MAX_FONT_SIZE
-wd'set _ value ',":FONT_SIZE
-wd'bin zs'
-wd'cc back button'
-wd'cn Back'
-
-wd'psel main'
-
 update_style =: {{
   id =. wd'getp id'
   wd'psel main'
@@ -79,6 +59,79 @@ update_style =: {{
   wd'psel ',id
 }}
 update_style''
+
+wd'pc options owner ptop'
+wd'pn Options'
+wd'bin v'
+wd'groupbox "Font size"'
+wd'bin h'
+wd'cc font_size_slider slider'
+wd'set _ min ',":MIN_FONT_SIZE
+wd'set _ max ',":MAX_FONT_SIZE
+wd'set _ value ',":FONT_SIZE
+wd'cc font_size_spinbox spinbox'
+wd'set _ min ',":MIN_FONT_SIZE
+wd'set _ max ',":MAX_FONT_SIZE
+wd'set _ value ',":FONT_SIZE
+wd'groupboxend'
+wd'groupbox "Background color"'
+wd'bin g'
+wd'grid cell 0 0'
+wd'cc background_r_label static'
+wd'cn Red:'
+wd'grid cell 0 1'
+wd'cc background_r_slider slider'
+wd'set _ min 0'
+wd'set _ max 255'
+wd'grid cell 0 2'
+wd'cc background_r_spinbox spinbox'
+wd'set _ min 0'
+wd'set _ max 255'
+wd'grid cell 1 0'
+wd'cc background_g_label static'
+wd'cn Green:'
+wd'grid cell 1 1'
+wd'cc background_g_slider slider'
+wd'set _ min 0'
+wd'set _ max 255'
+wd'grid cell 1 2'
+wd'cc background_g_spinbox spinbox'
+wd'set _ min 0'
+wd'set _ max 255'
+wd'grid cell 2 0'
+wd'cc background_b_label static'
+wd'cn Blue:'
+wd'grid cell 2 1'
+wd'cc background_b_slider slider'
+wd'set _ min 0'
+wd'set _ max 255'
+wd'grid cell 2 2'
+wd'cc background_b_spinbox spinbox'
+wd'set _ min 0'
+wd'set _ max 255'
+wd'grid cell 3 0'
+wd'cc background_hex_label static'
+wd'cn Hex:'
+wd'grid cell 3 1 1 2'
+wd'cc background_hex edit'
+wd'set _ regexpvalidator *#?[0-9a-fA-F]{6}'
+wd'groupboxend'
+wd'bin s'
+wd'cc back button'
+wd'cn Back'
+
+update_background_color =: {{
+  wd'set background_r_slider value ',":0{BACKGROUND_COLOR
+  wd'set background_r_spinbox value ',":0{BACKGROUND_COLOR
+  wd'set background_g_slider value ',":1{BACKGROUND_COLOR
+  wd'set background_g_spinbox value ',":1{BACKGROUND_COLOR
+  wd'set background_b_slider value ',":2{BACKGROUND_COLOR
+  wd'set background_b_spinbox value ',":2{BACKGROUND_COLOR
+  wd'set background_hex text ',,hfd 16 16#:BACKGROUND_COLOR
+}}
+update_background_color''
+
+wd'psel main'
 
 main_options_button =: {{
   wd'psel options'
@@ -183,12 +236,64 @@ options_close =: options_back_button =: {{
 }}
 
 options_font_size_slider_changed =: {{
-  wd'set font_size_spinbox value ',":FONT_SIZE_settings_ =: font_size_slider
+  wd'set font_size_spinbox value ',":FONT_SIZE_settings_ =: ".font_size_slider
   update_style''
 }}
 
 options_font_size_spinbox_changed =: {{
-  wd'set font_size_slider value ',":FONT_SIZE_settings_ =: font_size_spinbox
+  wd'set font_size_slider value ',":FONT_SIZE_settings_ =: ".font_size_spinbox
+  update_style''
+}}
+
+update_background_color =: {{
+  wd'set background_r_slider value ',":0{BACKGROUND_COLOR
+  wd'set background_r_spinbox value ',":0{BACKGROUND_COLOR
+  wd'set background_g_slider value ',":1{BACKGROUND_COLOR
+  wd'set background_g_spinbox value ',":1{BACKGROUND_COLOR
+  wd'set background_b_slider value ',":2{BACKGROUND_COLOR
+  wd'set background_b_spinbox value ',":2{BACKGROUND_COLOR
+  wd'set background_hex text ',,hfd 16 16#:BACKGROUND_COLOR
+}}
+
+options_background_r_slider_changed =: {{
+  BACKGROUND_COLOR_settings_ =: BACKGROUND_COLOR 0}~".background_r_slider
+  update_background_color''
+  update_style''
+}}
+
+options_background_r_spinbox_changed =: {{
+  BACKGROUND_COLOR_settings_ =: BACKGROUND_COLOR 0}~".background_r_spinbox
+  update_background_color''
+  update_style''
+}}
+
+options_background_g_slider_changed =: {{
+  BACKGROUND_COLOR_settings_ =: BACKGROUND_COLOR 1}~".background_g_slider
+  update_background_color''
+  update_style''
+}}
+
+options_background_g_spinbox_changed =: {{
+  BACKGROUND_COLOR_settings_ =: BACKGROUND_COLOR 1}~".background_g_spinbox
+  update_background_color''
+  update_style''
+}}
+
+options_background_b_slider_changed =: {{
+  BACKGROUND_COLOR_settings_ =: BACKGROUND_COLOR 2}~".background_b_slider
+  update_background_color''
+  update_style''
+}}
+
+options_background_b_spinbox_changed =: {{
+  BACKGROUND_COLOR_settings_ =: BACKGROUND_COLOR 2}~".background_b_spinbox
+  update_background_color''
+  update_style''
+}}
+
+options_background_hex_button =: {{
+  BACKGROUND_COLOR_settings_ =: (3$256)#:dfh}.^:('#'={:)background_hex
+  update_background_color''
   update_style''
 }}
 
