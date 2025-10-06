@@ -70,6 +70,11 @@ demonstration):
 }
 ```
 
+## Examples
+
+`beginner.roboks` contains an example that solves the cube from any state using
+a beginner's method
+
 ## Why?
 
 Just some idea I had: what if the Rubik's cube notation was powerful enough to

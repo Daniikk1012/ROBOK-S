@@ -1,0 +1,123 @@
+>> Beginner's method algorithm
+
+x2 >> Look at yellow
+
+>> Do a white cross around yellow center
+(
+  <search>: { [UR = D] => U }
+  <search> <search>2
+  {
+    [FR = D] => R
+    [BR = D] => R'
+    [DR = D] => R2
+    [FL = D] => d2R'
+    [BL = D] => d2R
+    [DL = D] => D2R2
+    [RF = D] => dR'
+    [RB = D] => d'R
+    [LF = D] => dR
+    [LB = D] => d'R'
+    [DF = D] => DR2
+    [DB = D] => D'R2
+    [RU = D] => Rd'R
+    [RD = D] => RdR'
+    [LD = D] => DF'RF
+    [FD = D] => F'RF
+    [BD = D] => BR'B'
+  }
+)22
+
+>> Now solve the proper white cross
+(
+  <search>: { [RU <> R | UR <> D] => U }
+  <search> <search>2
+  R2 d
+)22
+
+>> Cross is done, now corners
+<sexy move>: RUR'U'
+(
+  <search top>: { [RUF <> D, URF <> D, FRU <> D] => U }
+  <search top> <search top>2
+  { [RUF <> D, URF <> D, FRU <> D] => (
+    <search bottom>: {
+      [DFR = D, FDR = F, RDF = R | DFR <> D, FDR <> D, RDF <> D] => d
+    }
+    <search bottom> <search bottom>2
+    <sexy move>
+  )}
+  <search match>: {
+    [RUF = D] => { [URF <> R | FRU <> F] => d }
+    [URF = D] => { [RUF <> F | FRU <> R] => d }
+    [FRU = D] => { [RUF <> R | URF <> F] => d }
+  }
+  <search match> <search match>2
+  <orient>: { [DFR <> D | FDR <> F | RDF <> R] => <sexy move> }
+  <orient> <orient>22
+)22
+
+>> First layer is done. Now the second layer
+<put piece left>: U' F' U F <sexy move>'
+(
+  <search top>: { [RU = U | UR = U] => U }
+  <search top> <search top>2
+  { [RU = U | UR = U] => (
+    <search bottom>: { [FR = F, RF = R | FR = U | RF = U] => d }
+    <search bottom> <search bottom>2
+    <put piece left>
+    U2
+  )}
+  <orient>: { [RU <> R] => d }
+  <orient> <orient>2
+  {
+    [RU = R, UR = F] => <put piece left>
+    [RU = R, UR = B] => U B U' B' U' R' U R
+  }
+)22
+
+>> First two layers done, now yellow cross
+{
+  [UL = U, UB = U, UF <> U, UR <> U] => F <sexy move>' F'
+  [UL = U, UR = U, UB <> U, UF <> U] => F <sexy move> F'
+  [UL <> U, UR <> U, UB <> U, UF <> U] => F <sexy move> F' U2 F <sexy move>' F'
+  [UL = U, UR = U, UB = U, UF = U] => ()
+  [] => U
+}22
+<permute cross>: R U R' U R U2 R'
+<prepare to permute>: {
+  [FU = F, LU <> L, BU <> B, RU <> R] => ()
+  [FU <> F, LU = L, BU <> B, RU <> R] => y'
+  [FU <> F, LU <> L, BU = B, RU <> R] => y2
+  [FU <> F, LU <> L, BU <> B, RU = R] => y
+  [FU = F, LU <> L, BU = B, RU <> R] => <permute cross> U' y'
+  [FU <> F, LU = L, BU <> B, RU = R] => <permute cross> U y
+  [FU = F, LU = L, BU = B, RU = R] => ()
+  [] => U
+}
+<prepare to permute> <prepare to permute>2
+{ [RU <> R] => <permute cross> }2
+
+>> Yellow cross done. Now rotate the corners
+x2 >> We do that upside down
+(
+  <orient>: { [DFR <> D] => <sexy move>2 }
+  <orient> <orient>2
+  D
+)22
+x2 >> Return to normal orientation
+
+>> Lastly, permute the corners
+<swap>: R' D2 R
+(
+  <search unsolved>: { [FRU = FU, RFU = RU] => U }
+  <search unsolved> <search unsolved>2
+  <swap>
+  <search match>: { [LBD <> RU | DLB <> FU] => U }
+  <search match> <search match>2
+  <swap>
+  <search white>: { [FRU <> D, RFU <> D, URF <> D] => U }
+  <search white> <search white>2
+  <swap>
+)22
+<rotate>: { [RU <> R] => U }
+<rotate> <rotate>2
