@@ -32,16 +32,20 @@ SIDES_parser_ append items(0 6 8 2;1 3 7 5)&(+each)every 9*i.6
 'y'append(,|.each)&>/(TURNS_parser_ i.'uD'){PERMUTATIONS
 'z'append(,|.each)&>/(TURNS_parser_ i.'fB'){PERMUTATIONS
 
-NB. Rotates the state y according to AST x. Throws on error
+NB. Rotates the state y according to AST x
+NB. Returns the list of all intermediate states, excluding starting state
+NB. Throws on error
 rotate =: {{
   select. i =. >{.x
-  case. AST_TURN_parser_ do. ((>{:x)>@{PERMUTATIONS)&C.&.,y
+  case. AST_TURN_parser_ do. ,:((>{:x)>@{PERMUTATIONS)&C.&.,y
   case. AST_PRIME_parser_ do. y rotate inv~>{:x
-  case. AST_TWICE_parser_ do. y rotate^:2~>{:x
+  case. AST_TWICE_parser_ do. }.(>{:x)(],[rotate{:@])^:2,:y
   case. AST_GROUP_parser_ do.
-    for_child. >{:x do. y =. y rotate~>child end.
-    y
+    r =. ,:y
+    for_child. >{:x do. r =. r,(>child)rotate{:r end.
+    }.r
   case. AST_CONDITIONS_parser_ do.
+    r =. 0$~0,$y
     for_term. >{:x do.
       'cond body' =. term
       if. #cond do.
@@ -54,19 +58,20 @@ rotate =: {{
           continue.
         end.
       end.
-      y =. body rotate y
+      r =. body rotate y
       break.
     end.
-    y
+    r
   end.
 }} :.{{
   select. i =. >{.x
-  case. AST_TURN_parser_ do. ((>{:x)>@{PERMUTATIONS)&C.inv&.,y
+  case. AST_TURN_parser_ do. ,:((>{:x)>@{PERMUTATIONS)&C.inv&.,y
   case. AST_PRIME_parser_ do. y rotate~>{:x
-  case. AST_TWICE_parser_ do. y rotate inv^:2~>{:x
+  case. AST_TWICE_parser_ do. }.(>{:x)(],[rotate inv{:@])^:2,:y
   case. AST_GROUP_parser_ do.
-    for_child. |.>{:x do. y =. y rotate inv~>child end.
-    y
+    r =. ,:y
+    for_child. |.>{:x do. r =. r,(>child)rotate inv{:r end.
+    }.r
   case. AST_CONDITIONS_parser_ do. throw.
   end.
 }}

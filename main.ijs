@@ -33,7 +33,7 @@ NB. The entry point of the application, as well as the CLI
   end.
 
   try.
-    state =. ast rotate_cube_ DEFAULT_STATE_cube_
+    state =. {:ast rotate_cube_ DEFAULT_STATE_cube_
   catcht.
     stderr program,': error: cannot invert a conditional',LF
     exit 2

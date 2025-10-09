@@ -118,6 +118,6 @@ x2 >> Return to normal orientation
   <search white>: { [FRU <> D, RFU <> D, URF <> D] => U }
   <search white> <search white>2
   <swap>
-)22
+)2
 <rotate>: { [RU <> R] => U }
 <rotate> <rotate>2

@@ -33,7 +33,16 @@ wd'cn Options'
 wd'bin sz'
 wd'cc graphics isigraph'
 wd'set _ minwh 50 50'
-wd'bin zv1h'
+wd'bin h'
+wd'cc frame_label static'
+wd'cn *Frame:'
+wd'cc frame_slider slider'
+wd'set _ min 0'
+wd'set _ max 0'
+wd'cc frame_spinbox spinbox'
+wd'set _ min 0'
+wd'set _ max 0'
+wd'bin zzv1h'
 wd'cc scramble_text edit'
 wd'cc scramble button'
 wd'cn Scramble'
@@ -139,56 +148,6 @@ main_options_button =: {{
   wd'pcenter'
 }}
 
-main_scramble_button =: {{
-  wd'set scramble_text text *',scramble_text =: scramble_cube_''
-  main_compile_button''
-}}
-
-main_choose_button =: {{
-  file =. wd'mb open1 "Choose file" .'
-  if. #file do.
-    wd'set path text *',path =: file
-    main_load_button''
-  end.
-}}
-
-main_path_button =: main_load_button =: {{
-  s =. fread path
-  if. s-:_1 do.
-    wdinfo'Error!';'Could not read from the file: ',>{:2!:8''
-  else.
-    wd'set code text *',s
-  end.
-}}
-
-main_save_button =: {{
-  if. _1-:code fwrite path do.
-    wdinfo'Error!';'Could not write into the file: ',>{:2!:8''
-  else.
-    wdinfo'Saved successfully'
-  end.
-}}
-
-NB. State of the cube
-STATE =: DEFAULT_STATE_cube_
-
-main_scramble_text_button =: main_compile_button =: {{
-  if. JBOXED~:3!:0 ast =. parse_parser_ scramble_text,code do.
-    wdinfo'Error!';ast
-    STATE =: DEFAULT_STATE_cube_
-    glpaint''
-    return.
-  end.
-  try.
-    STATE =: ast rotate_cube_ DEFAULT_STATE_cube_
-  catcht.
-    wdinfo'Error!';'cannot invert a conditional'
-    STATE =: DEFAULT_STATE_cube_
-    return.
-  end.
-  glpaint''
-}}
-
 NB. Using the same order as SIDES_parser_
 COLORS =: 255 0 0,255 255 255,0 255 0,255 165 0,255 255 0,:0 0 255
 
@@ -221,11 +180,89 @@ main_graphics_paint =: {{
     size =. (,~*&RATIO){:gsize
   end.
   origin =. MARGIN+-:gsize-size
+  state =. STATES{~".frame_slider
   'RUF'(]{{
     glrgb y
     glbrush''
     glpolygon x
-  }}"1 COLORS{~STATE{~SIDES_parser_ i.[)items,"2 origin+"1 POSITIONS*"1 size
+  }}"1 COLORS{~state{~SIDES_parser_ i.[)items,"2 origin+"1 POSITIONS*"1 size
+}}
+
+main_frame_slider_changed =: {{
+  wd'set frame_spinbox value ',frame_slider
+  glpaint''
+}}
+
+main_frame_spinbox_changed =: {{
+  wd'set frame_slider value ',frame_spinbox
+  glpaint''
+}}
+
+main_scramble_button =: {{
+  wd'set scramble_text text *',scramble_text =: scramble_cube_''
+  main_compile_button''
+}}
+
+main_choose_button =: {{
+  file =. wd'mb open1 "Choose file" .'
+  if. #file do.
+    wd'set path text *',path =: file
+    main_load_button''
+  end.
+}}
+
+main_path_button =: main_load_button =: {{
+  s =. fread path
+  if. s-:_1 do.
+    wdinfo'Error!';'Could not read from the file: ',>{:2!:8''
+  else.
+    wd'set code text *',s
+  end.
+}}
+
+main_save_button =: {{
+  if. _1-:code fwrite path do.
+    wdinfo'Error!';'Could not write into the file: ',>{:2!:8''
+  else.
+    wdinfo'Saved successfully'
+  end.
+}}
+
+NB. States of the cube
+STATES =: ,:DEFAULT_STATE_cube_
+
+main_scramble_text_button =: main_compile_button =: {{
+  STATES =: ,:DEFAULT_STATE_cube_
+  wd'set frame_slider max 0'
+  wd'set frame_slider value 0'
+  wd'set frame_spinbox max 0'
+  wd'set frame_spinbox value 0'
+  if. JBOXED~:3!:0 scramble_ast =. parse_parser_ scramble_text do.
+    wdinfo'Error in scramble!';scramble_ast
+    return.
+  end.
+  try.
+    state =. {:DEFAULT_STATE_cube_,scramble_ast rotate_cube_ DEFAULT_STATE_cube_
+  catcht.
+    wdinfo'Error in scramble!';'cannot invert a conditional'
+    return.
+  end.
+  if. JBOXED~:3!:0 ast =. parse_parser_ code do.
+    wdinfo'Error!';ast
+    glpaint''
+    return.
+  end.
+  try.
+    STATES =: state,ast rotate_cube_ state
+  catcht.
+    wdinfo'Error!';'cannot invert a conditional'
+    return.
+  end.
+  wd'set frame_slider max ',":<:#STATES
+  wd'set frame_slider value ',":<:#STATES
+  wd'set frame_spinbox max ',":<:#STATES
+  wd'set frame_spinbox value ',":<:#STATES
+  glpaint''
 }}
 
 options_close =: options_back_button =: {{
