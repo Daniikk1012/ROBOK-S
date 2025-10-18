@@ -1,7 +1,8 @@
 NB. Parser for the extended Rubik's cube notation
 
-require'jarser.ijs'
-cocurrent'parser'
+here =. ({.~1+<./@i:&'/\')>(4!:4''){4!:3''
+require here,'jarser.ijs'
+cocurrent'roboksparser'
 coinsert'jarser'
 
 NB. All possible basic (Without modifiers) turns

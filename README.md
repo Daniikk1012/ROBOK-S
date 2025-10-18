@@ -1,10 +1,20 @@
 # ROBOK'S: An interpreter for extended Rubik's cube notation
 
-This is an interpreter for my extension of the Rubik's cube notation, written in
-J. Run it using either `jconsole` or `jqt`, with `main.ijs` as the script, with
-this project as the current directory (Or files won't load due to relative paths
-not being resolved). The script will automatically detect whether to use GUI or
-CLI depending on how you run it.
+## Usage
+
+The easiest way to install and run the GUI is by running J Qt IDE and typing:
+```j
+require'pacman'
+'install'jpkg'github:Daniikk1012/ROBOK-S'`
+load'Daniikk1012/ROBOK-S/gui'
+```
+If you want to use it as a library, omit the `/gui`, this will load `parser.ijs`
+and `cube.ijs`. For this use case you don't need to be running J Qt IDE
+specifically, both JHS and J console will work.
+
+If you want to run it as a standalone application, not as an addon, clone this
+repository anywhere you'd like and then run `main.ijs` using either `jconsole`
+(For CLI) or `jqt` (For GUI).
 
 ## What's the notation?
 

@@ -1,8 +1,10 @@
 NB. The entry point of the application, as well as the CLI
 
 {{
+  here =. ({.~1+<./@i:&'/\')>(4!:4''){4!:3''
   if. IFQT do.
-    load'gui.ijs'
+    load here,'gui.ijs'
+    wd'ide hide'
     return.
   end.
 
@@ -24,26 +26,26 @@ NB. The entry point of the application, as well as the CLI
     exit errno
   end.
 
-  require'parser.ijs'
-  require'cube.ijs'
+  require here,'parser.ijs'
+  require here,'cube.ijs'
 
-  if. JBOXED~:3!:0 ast =. parse_parser_ code do.
+  if. JBOXED~:3!:0 ast =. parse_roboksparser_ code do.
     echo ast
     exit 1
   end.
 
   try.
-    state =. {:ast rotate_cube_ DEFAULT_STATE_cube_
+    state =. {:ast rotate_robokscube_ DEFAULT_STATE_robokscube_
   catcht.
     stderr program,': error: cannot invert a conditional',LF
     exit 2
   end.
 
   echo'BEFORE:'
-  display_cube_ DEFAULT_STATE_cube_
+  display_robokscube_ DEFAULT_STATE_robokscube_
   echo''
   echo'AFTER:'
-  display_cube_ state
+  display_robokscube_ state
 
   exit''
 }}''

@@ -1,15 +1,16 @@
 NB. GUI system
 
-require'cube.ijs'
-require'defaults.ijs'
-require'parser.ijs'
+here =. ({.~1+<./@i:&'/\')>(4!:4''){4!:3''
+require here,'cube.ijs'
+require here,'defaults.ijs'
+require here,'parser.ijs'
 
-cocurrent'settings'
-load^:fexist'settings.ijs'
+cocurrent'robokssettings'
+load^:fexist'~config/roboks.cfg'
 
-cocurrent'gui'
+cocurrent'roboksgui'
 coinsert'jgl2'
-coinsert'settings'
+coinsert'robokssettings'
 
 9!:1@<.@(+/ .^&2@(6!:0@]))'' NB. Randomize seed, copied from J phrases
 
@@ -148,7 +149,7 @@ main_options_button =: {{
   wd'pcenter'
 }}
 
-NB. Using the same order as SIDES_parser_
+NB. Using the same order as SIDES_roboksparser_
 COLORS =: 255 0 0,255 255 255,0 255 0,255 165 0,255 255 0,:0 0 255
 
 NB. Polygon points (Relative to viewport size)
@@ -181,11 +182,12 @@ main_graphics_paint =: {{
   end.
   origin =. MARGIN+-:gsize-size
   state =. STATES{~".frame_slider
+  normalized =. ,"2 origin+"1 POSITIONS*"1 size
   'RUF'(]{{
     glrgb y
     glbrush''
     glpolygon x
-  }}"1 COLORS{~state{~SIDES_parser_ i.[)items,"2 origin+"1 POSITIONS*"1 size
+  }}"1 COLORS{~state{~SIDES_roboksparser_ i.[)items normalized
 }}
 
 main_frame_slider_changed =: {{
@@ -199,7 +201,7 @@ main_frame_spinbox_changed =: {{
 }}
 
 main_scramble_button =: {{
-  wd'set scramble_text text *',scramble_text =: scramble_cube_''
+  wd'set scramble_text text *',scramble_text =: scramble_robokscube_''
   main_compile_button''
 }}
 
@@ -224,36 +226,37 @@ main_save_button =: {{
   if. _1-:code fwrite path do.
     wdinfo'Error!';'Could not write into the file: ',>{:2!:8''
   else.
-    wdinfo'Saved successfully'
+    wdinfo'Success!';'Saved successfully'
   end.
 }}
 
 NB. States of the cube
-STATES =: ,:DEFAULT_STATE_cube_
+STATES =: ,:DEFAULT_STATE_robokscube_
 
 main_scramble_text_button =: main_compile_button =: {{
-  STATES =: ,:DEFAULT_STATE_cube_
+  STATES =: ,:DEFAULT_STATE_robokscube_
   wd'set frame_slider max 0'
   wd'set frame_slider value 0'
   wd'set frame_spinbox max 0'
   wd'set frame_spinbox value 0'
-  if. JBOXED~:3!:0 scramble_ast =. parse_parser_ scramble_text do.
+  if. JBOXED~:3!:0 scramble_ast =. parse_roboksparser_ scramble_text do.
     wdinfo'Error in scramble!';scramble_ast
     return.
   end.
   try.
-    state =. {:DEFAULT_STATE_cube_,scramble_ast rotate_cube_ DEFAULT_STATE_cube_
+    maybe_empty =. scramble_ast rotate_robokscube_ DEFAULT_STATE_robokscube_
+    state =. {:DEFAULT_STATE_robokscube_,maybe_empty
   catcht.
     wdinfo'Error in scramble!';'cannot invert a conditional'
     return.
   end.
-  if. JBOXED~:3!:0 ast =. parse_parser_ code do.
+  if. JBOXED~:3!:0 ast =. parse_roboksparser_ code do.
     wdinfo'Error!';ast
     glpaint''
     return.
   end.
   try.
-    STATES =: state,ast rotate_cube_ state
+    STATES =: state,ast rotate_robokscube_ state
   catcht.
     wdinfo'Error!';'cannot invert a conditional'
     return.
@@ -266,19 +269,21 @@ main_scramble_text_button =: main_compile_button =: {{
 }}
 
 options_close =: options_back_button =: {{
-  if. _1-:(show nl_settings_'')fwrite'settings.ijs' do.
+  if. _1-:((>,'=:',5!:5)"0 nl_robokssettings_'')fwrite'~config/roboks.cfg' do.
     wdinfo'Error!';'could not save settings: ',>{:2!:8''
   end.
   wd'pshow hide'
 }}
 
 options_font_size_slider_changed =: {{
-  wd'set font_size_spinbox value ',":FONT_SIZE_settings_ =: ".font_size_slider
+  FONT_SIZE_robokssettings_ =: ".font_size_slider
+  wd'set font_size_spinbox value ',font_size_slider
   update_style''
 }}
 
 options_font_size_spinbox_changed =: {{
-  wd'set font_size_slider value ',":FONT_SIZE_settings_ =: ".font_size_spinbox
+  FONT_SIZE_robokssettings_ =: ".font_size_spinbox
+  wd'set font_size_slider value ',font_size_spinbox
   update_style''
 }}
 
@@ -293,43 +298,43 @@ update_background_color =: {{
 }}
 
 options_background_r_slider_changed =: {{
-  BACKGROUND_COLOR_settings_ =: BACKGROUND_COLOR 0}~".background_r_slider
+  BACKGROUND_COLOR_robokssettings_ =: BACKGROUND_COLOR 0}~".background_r_slider
   update_background_color''
   update_style''
 }}
 
 options_background_r_spinbox_changed =: {{
-  BACKGROUND_COLOR_settings_ =: BACKGROUND_COLOR 0}~".background_r_spinbox
+  BACKGROUND_COLOR_robokssettings_ =: BACKGROUND_COLOR 0}~".background_r_spinbox
   update_background_color''
   update_style''
 }}
 
 options_background_g_slider_changed =: {{
-  BACKGROUND_COLOR_settings_ =: BACKGROUND_COLOR 1}~".background_g_slider
+  BACKGROUND_COLOR_robokssettings_ =: BACKGROUND_COLOR 1}~".background_g_slider
   update_background_color''
   update_style''
 }}
 
 options_background_g_spinbox_changed =: {{
-  BACKGROUND_COLOR_settings_ =: BACKGROUND_COLOR 1}~".background_g_spinbox
+  BACKGROUND_COLOR_robokssettings_ =: BACKGROUND_COLOR 1}~".background_g_spinbox
   update_background_color''
   update_style''
 }}
 
 options_background_b_slider_changed =: {{
-  BACKGROUND_COLOR_settings_ =: BACKGROUND_COLOR 2}~".background_b_slider
+  BACKGROUND_COLOR_robokssettings_ =: BACKGROUND_COLOR 2}~".background_b_slider
   update_background_color''
   update_style''
 }}
 
 options_background_b_spinbox_changed =: {{
-  BACKGROUND_COLOR_settings_ =: BACKGROUND_COLOR 2}~".background_b_spinbox
+  BACKGROUND_COLOR_robokssettings_ =: BACKGROUND_COLOR 2}~".background_b_spinbox
   update_background_color''
   update_style''
 }}
 
 options_background_hex_button =: {{
-  BACKGROUND_COLOR_settings_ =: (3$256)#:dfh}.^:('#'={:)background_hex
+  BACKGROUND_COLOR_robokssettings_ =: (3$256)#:dfh}.^:('#'={:)background_hex
   update_background_color''
   update_style''
 }}
@@ -337,4 +342,3 @@ options_background_hex_button =: {{
 wd'pshow'
 wd'pcenter'
 wd'ptop'
-wd'ide hide'
