@@ -14,7 +14,6 @@ VERSION =: '0.1.0'
 FILES =: 0 : 0
 LICENSE
 README.md
-ROBOK-S.ijs
 beginner.roboks
 cube.ijs
 defaults.ijs
@@ -23,6 +22,7 @@ jarser.ijs
 main.ijs
 manifest.ijs
 parser.ijs
+roboks.ijs
 )
 
 RELEASE =: 'j9.6'
