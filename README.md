@@ -6,7 +6,7 @@ The easiest way to install and run the GUI is by running J Qt IDE and typing:
 ```j
 require'pacman'
 'install'jpkg'github:Daniikk1012/ROBOK-S'`
-load'Daniikk1012/ROBOK-S/gui'
+load'daniikk1012/roboks/gui'
 ```
 If you want to use it as a library, omit the `/gui`, this will load `parser.ijs`
 and `cube.ijs`. For this use case you don't need to be running J Qt IDE

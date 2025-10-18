@@ -1,4 +1,4 @@
-FOLDER =: 'Daniikk1012/ROBOK-S'
+FOLDER =: 'daniikk1012/roboks'
 
 CAPTION =: 'Interpreter for an extended Rubik''s cube notation'
 
