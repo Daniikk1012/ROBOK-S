@@ -1,6 +1,6 @@
-FOLDER =: 'daniikk1012/roboks'
+FOLDER =: 'misc/roboks'
 
-CAPTION =: 'Interpreter for an extended Rubik''s cube notation'
+CAPTION =: 'ROBOK''S: Interpreter for an extended Rubik''s cube notation'
 
 DESCRIPTION =: 0 : 0
 ROBOK'S is an interpreter for an extension Rubik's cube notation that has
