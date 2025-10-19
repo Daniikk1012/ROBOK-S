@@ -25,7 +25,7 @@ STYLESHEET =: noun define
 MIN_FONT_SIZE =. 12
 MAX_FONT_SIZE =. 24
 
-wd'pc main closeok'
+wd'pc roboks closeok'
 wd'pmove _1 _1 800 400'
 wd'pn *Rubik''s Cube'
 wd'bin hv1h'
@@ -62,7 +62,7 @@ wd'cn Compile'
 
 update_style =: {{
   id =. wd'getp id'
-  wd'psel main'
+  wd'psel roboks'
   s =. ('{0}';":FONT_SIZE)stringreplace STYLESHEET
   s =. ('{1}';}.;<@(',',":)"0 BACKGROUND_COLOR)stringreplace s
   wd'pstylesheet *',s
@@ -70,7 +70,7 @@ update_style =: {{
 }}
 update_style''
 
-wd'pc options owner ptop'
+wd'pc roboksoptions owner ptop'
 wd'pn Options'
 wd'bin v'
 wd'groupbox "Font size"'
@@ -141,10 +141,10 @@ update_background_color =: {{
 }}
 update_background_color''
 
-wd'psel main'
+wd'psel roboks'
 
-main_options_button =: {{
-  wd'psel options'
+roboks_options_button =: {{
+  wd'psel roboksoptions'
   wd'pshow'
   wd'pcenter'
 }}
@@ -170,7 +170,7 @@ RATIO =: %:3r4 NB. Ratio of the bounding box of a perfect hexagon
 NB. Margin for the graphics
 MARGIN =: 5
 
-main_graphics_paint =: {{
+roboks_graphics_paint =: {{
   glclear''
   glfill BACKGROUND_COLOR,255
   glpen 2
@@ -190,30 +190,30 @@ main_graphics_paint =: {{
   }}"1 COLORS{~state{~SIDES_roboksparser_ i.[)items normalized
 }}
 
-main_frame_slider_changed =: {{
+roboks_frame_slider_changed =: {{
   wd'set frame_spinbox value ',frame_slider
   glpaint''
 }}
 
-main_frame_spinbox_changed =: {{
+roboks_frame_spinbox_changed =: {{
   wd'set frame_slider value ',frame_spinbox
   glpaint''
 }}
 
-main_scramble_button =: {{
+roboks_scramble_button =: {{
   wd'set scramble_text text *',scramble_text =: scramble_robokscube_''
-  main_compile_button''
+  roboks_compile_button''
 }}
 
-main_choose_button =: {{
+roboks_choose_button =: {{
   file =. wd'mb open1 "Choose file" .'
   if. #file do.
     wd'set path text *',path =: file
-    main_load_button''
+    roboks_load_button''
   end.
 }}
 
-main_path_button =: main_load_button =: {{
+roboks_path_button =: roboks_load_button =: {{
   s =. fread path
   if. s-:_1 do.
     wdinfo'Error!';'Could not read from the file: ',>{:2!:8''
@@ -222,7 +222,7 @@ main_path_button =: main_load_button =: {{
   end.
 }}
 
-main_save_button =: {{
+roboks_save_button =: {{
   if. _1-:code fwrite path do.
     wdinfo'Error!';'Could not write into the file: ',>{:2!:8''
   else.
@@ -233,7 +233,7 @@ main_save_button =: {{
 NB. States of the cube
 STATES =: ,:DEFAULT_STATE_robokscube_
 
-main_scramble_text_button =: main_compile_button =: {{
+roboks_scramble_text_button =: roboks_compile_button =: {{
   STATES =: ,:DEFAULT_STATE_robokscube_
   wd'set frame_slider max 0'
   wd'set frame_slider value 0'
@@ -268,20 +268,21 @@ main_scramble_text_button =: main_compile_button =: {{
   glpaint''
 }}
 
-options_close =: options_back_button =: {{
-  if. _1-:((>,'=:',5!:5)"0 nl_robokssettings_'')fwrite'~config/roboks.cfg' do.
+roboksoptions_close =: roboksoptions_back_button =: {{
+  content =. ;<@(>,'=:',5!:5,LF"_)"0 nl_robokssettings_''
+  if. _1-:content fwrite'~config/roboks.cfg' do.
     wdinfo'Error!';'could not save settings: ',>{:2!:8''
   end.
   wd'pshow hide'
 }}
 
-options_font_size_slider_changed =: {{
+roboksoptions_font_size_slider_changed =: {{
   FONT_SIZE_robokssettings_ =: ".font_size_slider
   wd'set font_size_spinbox value ',font_size_slider
   update_style''
 }}
 
-options_font_size_spinbox_changed =: {{
+roboksoptions_font_size_spinbox_changed =: {{
   FONT_SIZE_robokssettings_ =: ".font_size_spinbox
   wd'set font_size_slider value ',font_size_spinbox
   update_style''
@@ -297,43 +298,43 @@ update_background_color =: {{
   wd'set background_hex text ',,hfd 16 16#:BACKGROUND_COLOR
 }}
 
-options_background_r_slider_changed =: {{
+roboksoptions_background_r_slider_changed =: {{
   BACKGROUND_COLOR_robokssettings_ =: BACKGROUND_COLOR 0}~".background_r_slider
   update_background_color''
   update_style''
 }}
 
-options_background_r_spinbox_changed =: {{
+roboksoptions_background_r_spinbox_changed =: {{
   BACKGROUND_COLOR_robokssettings_ =: BACKGROUND_COLOR 0}~".background_r_spinbox
   update_background_color''
   update_style''
 }}
 
-options_background_g_slider_changed =: {{
+roboksoptions_background_g_slider_changed =: {{
   BACKGROUND_COLOR_robokssettings_ =: BACKGROUND_COLOR 1}~".background_g_slider
   update_background_color''
   update_style''
 }}
 
-options_background_g_spinbox_changed =: {{
+roboksoptions_background_g_spinbox_changed =: {{
   BACKGROUND_COLOR_robokssettings_ =: BACKGROUND_COLOR 1}~".background_g_spinbox
   update_background_color''
   update_style''
 }}
 
-options_background_b_slider_changed =: {{
+roboksoptions_background_b_slider_changed =: {{
   BACKGROUND_COLOR_robokssettings_ =: BACKGROUND_COLOR 2}~".background_b_slider
   update_background_color''
   update_style''
 }}
 
-options_background_b_spinbox_changed =: {{
+roboksoptions_background_b_spinbox_changed =: {{
   BACKGROUND_COLOR_robokssettings_ =: BACKGROUND_COLOR 2}~".background_b_spinbox
   update_background_color''
   update_style''
 }}
 
-options_background_hex_button =: {{
+roboksoptions_background_hex_button =: {{
   BACKGROUND_COLOR_robokssettings_ =: (3$256)#:dfh}.^:('#'={:)background_hex
   update_background_color''
   update_style''

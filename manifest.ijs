@@ -9,7 +9,7 @@ Rubik's cube in a familiar language. See README.md for the description of the
 syntax.
 )
 
-VERSION =: '0.1.0'
+VERSION =: '0.1.1'
 
 FILES =: 0 : 0
 LICENSE
