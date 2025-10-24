@@ -40,7 +40,7 @@ rotate =: {{
   select. i =. >{.x
   case. AST_TURN_roboksparser_ do. ,:((>{:x)>@{PERMUTATIONS)&C.&.,y
   case. AST_PRIME_roboksparser_ do. y rotate inv~>{:x
-  case. AST_TWICE_roboksparser_ do. }.(>{:x)(],[rotate{:@])^:2,:y
+  case. AST_REPEAT_roboksparser_ do. }.(>{:x)(],[rotate{:@])^:(>1{x),:y
   case. AST_GROUP_roboksparser_ do.
     r =. ,:y
     for_child. >{:x do. r =. r,(>child)rotate{:r end.
@@ -68,7 +68,7 @@ rotate =: {{
   select. i =. >{.x
   case. AST_TURN_roboksparser_ do. ,:((>{:x)>@{PERMUTATIONS)&C.inv&.,y
   case. AST_PRIME_roboksparser_ do. y rotate~>{:x
-  case. AST_TWICE_roboksparser_ do. }.(>{:x)(],[rotate inv{:@])^:2,:y
+  case. AST_REPEAT_roboksparser_ do. }.(>{:x)(],[rotate inv{:@])^:(>1{x),:y
   case. AST_GROUP_roboksparser_ do.
     r =. ,:y
     for_child. |.>{:x do. r =. r,(>child)rotate inv{:r end.

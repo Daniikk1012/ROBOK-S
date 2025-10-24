@@ -32,7 +32,8 @@ It supports the basic Rubik's cube notation, including:
 It also supports some extensions (which is the whole point of this project),
 specifically:
 - `'` does not only negate turns, but anything except conditionals;
-- `2` does not only double turns, but anything;
+- Supports repeating any number of times, not only 2;
+- Anything can be repeated, not only base turns;
 - `{ [ condition ] => moves ... }` - conditionals (more below);
 - `<macro>: body` - macro definitions, terminated by a newline;
 - `<macro>` - macro calls;

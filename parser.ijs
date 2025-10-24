@@ -26,7 +26,7 @@ NB. AST is encoded using boxed lists of varying lengths, where first item is the
 NB. type of the node, and the rest are the data of that node
 ('AST_'&,each AST_TYPES) =: i.#AST_TYPES =: ;cut each cutLF noun define
   TURN
-  PRIME TWICE
+  PRIME REPEAT
   GROUP
   CONDITIONS
 )
@@ -37,8 +37,8 @@ ast_named =: {{
   y =. {&AST_TYPES@>&.(0&{)y
   select. i
   case. AST_TURN do. y =. {&TURNS&.>&.(1&{)y
-  fcase. AST_PRIME do.
-  case. AST_TWICE do. y =. ast_named&.>&.(1&{)y
+  case. AST_PRIME do. y =. ast_named&.>&.(1&{)y
+  case. AST_REPEAT do. y =. ast_named&.>&.(2&{)y
   case. AST_GROUP do. y =. ast_named each&.>&.(1&{)y
   case. AST_CONDITIONS do.
     y =. ast_named&.>&.(1&{)rows&.>&.(1&{)y
@@ -163,8 +163,9 @@ NB. A term (Turn, macro, group, or conditions)
 term =: turn`macro`group`conditions Any
 
 NB. Suffixed terms (Prime and twice modifiers)
-suffix =. wss Right(''''Char Map(AST_PRIME"_)Or('2'Char Map(AST_TWICE"_)))
-suffixed =: term Pair(suffix f.Many)Map([:>[:,&<&.>/|.@>@{:,{.)
+number =. (,{{y Char`''}}"0'0123456789')Any More Map(".@;)
+suffix =. wss Right(''''Char Map((<AST_PRIME)"_)Or(number f.Map(AST_REPEAT&;)))
+suffixed =: term Pair(suffix f.Many)Map([:>[:(,<)&.>/|.@>@{:,{.)
 
 NB. A definition
 body_start =. lwss Right suffixed Many Left lwss
