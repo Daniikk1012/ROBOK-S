@@ -162,7 +162,7 @@ conditions =: unmapped f.Map>Map(,&<~&AST_CONDITIONS)
 NB. A term (Turn, macro, group, or conditions)
 term =: turn`macro`group`conditions Any
 
-NB. Suffixed terms (Prime and twice modifiers)
+NB. Suffixed terms (Prime and repeat modifiers)
 number =. (,{{y Char`''}}"0'0123456789')Any More Map(".@;)
 suffix =. wss Right(''''Char Map((<AST_PRIME)"_)Or(number f.Map(AST_REPEAT&;)))
 suffixed =: term Pair(suffix f.Many)Map([:>[:(,<)&.>/|.@>@{:,{.)
